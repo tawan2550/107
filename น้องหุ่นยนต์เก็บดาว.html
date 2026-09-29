@@ -1,0 +1,177 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>น้องหุ่นยนต์เก็บดาว</title>
+<style>
+:root{--bg:#e8f4ff;--card:#fff;--tx:#1d2b4f;--mut:#5b6b8c;--pri:#4f7cff;--cell:#eef5ff;--line:#c9dcf5;--wall:#334155;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f172a;--card:#1e293b;--tx:#f1f5f9;--mut:#a5b4cc;--cell:#273449;--line:#3a4a63;--wall:#94a3b8}}
+:root[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--tx:#f1f5f9;--mut:#a5b4cc;--cell:#273449;--line:#3a4a63;--wall:#94a3b8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Noto Sans Thai","Sarabun",system-ui,sans-serif}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:var(--card);border-bottom:3px solid var(--line)}
+header b{font-size:1.15rem;flex:1}#lvl{color:var(--mut)}
+button,select,input{font:inherit;color:inherit}
+button{min-height:44px;padding:6px 14px;border:2px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;font-weight:600}
+button:focus-visible,select:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+button:hover{transform:translateY(-1px)}
+main{max-width:1100px;margin:0 auto;padding:12px}
+.card{background:var(--card);border-radius:20px;padding:12px;box-shadow:0 3px 0 var(--line)}
+h3{margin:0 0 8px}
+.big{background:#22c55e;color:#fff;border-color:#16a34a;font-size:1.1rem}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+.modes button{min-height:80px;font-size:1.05rem}
+#lm{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px}
+#lm button{min-height:56px}
+.pl{display:grid;grid-template-columns:200px 1fr 290px;gap:12px;align-items:start}
+@media(max-width:820px){.pl{grid-template-columns:1fr}#bc{order:1}#pgc{order:2}#tbc{order:3}}
+#say{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:18px;padding:8px 14px;margin-bottom:10px;font-weight:600}#sf{font-size:2rem}
+#bd{display:flex;justify-content:center}
+#bo{display:grid;position:relative;border:3px solid var(--line);border-radius:12px;overflow:hidden}
+#bo>div.c{width:var(--c);height:var(--c);background:var(--cell);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:calc(var(--c)*.6)}
+#bo>div.c.w{background:var(--wall)}
+#rb{position:absolute;left:0;top:0;width:var(--c);height:var(--c);transition:transform .4s ease;display:flex;align-items:center;justify-content:center;font-size:calc(var(--c)*.65);z-index:2}
+#dw{position:absolute;inset:0;transition:transform .3s}#dw i{position:absolute;right:0;top:50%;margin-top:-.6em;font-style:normal;font-size:calc(var(--c)*.35);color:#f97316}
+.jmp{animation:jmp .45s}.shake{animation:shk .4s}
+@keyframes jmp{50%{transform:translateY(-70%) scale(1.2)}}@keyframes shk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.bk{display:flex;flex-direction:column;gap:4px;margin:5px 0;padding:8px 10px;border-radius:12px;color:#fff;font-weight:700;border:3px solid transparent;position:relative;text-align:left}
+#tb .bk{flex-direction:row;width:100%;cursor:grab}
+.b1{background:#2563eb}.b2{background:#a16207}.b3{background:#c2410c}.b4{background:#7e22ce}.b5{background:#047857}.b6{background:#0e7490}.b7{background:#be185d}
+.bh{display:flex;align-items:center;gap:6px}.bh select{color:#000;border-radius:8px;min-height:32px}
+.kids{background:rgba(255,255,255,.18);border:2px dashed rgba(255,255,255,.7);border-radius:10px;padding:4px 8px;min-height:44px}.kids.tg{border-style:solid;background:rgba(255,255,255,.3)}.kids em{font-weight:400;font-size:.85rem}
+.x{margin-left:auto;min-height:28px;padding:0 8px;background:rgba(0,0,0,.25);color:#fff;border:0;border-radius:8px}
+.run{border-color:#facc15!important;box-shadow:0 0 0 4px #22c55e,0 0 14px #facc15;transform:scale(1.03)}
+.err{background:#dc2626!important;border-color:#fff!important;animation:blk .5s 4}.err::after{content:"❗ ตรงนี้";font-size:.8rem}
+@keyframes blk{50%{opacity:.5}}
+#pg{min-height:150px;border:3px dashed var(--line);border-radius:14px;padding:6px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.bar .big{flex:1}
+#hx{margin-top:8px;font-weight:600;color:var(--mut)}
+#res{position:fixed;inset:0;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+#res[hidden],[hidden]{display:none!important}
+#res .card{max-width:420px;width:100%;text-align:center}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;max-width:420px}.tl button{min-height:48px;padding:0}
+.ed{display:grid;gap:4px;max-width:420px;margin:8px 0}.ed button{min-height:52px;padding:0;font-size:1.5rem}
+input[type=text],input:not([type]),select.f{padding:8px;border:2px solid var(--line);border-radius:10px;background:var(--card);min-height:44px}
+</style></head><body>
+<header><b>⭐ น้องหุ่นยนต์เก็บดาว</b><span id="lvl"></span><button id="snd">🔊 เสียงเปิด</button><button id="home">🏠 เมนู</button></header>
+<main id="v-menu">
+<div class="card"><h3>สวัสดี! ฉันคือโรโบ้ 🤖</h3><p>วันนี้เราจะไปเก็บดาวกัน! เขียนชุดคำสั่งให้โรโบ้เดินไปเก็บดาว <b>ลำดับ → วนซ้ำ → เงื่อนไข → ดีบัก</b></p>
+<label>ชื่อผู้เล่น <input id="pn" placeholder="ใส่ชื่อของฉัน"></label></div>
+<div class="modes"><button data-m="learn">🎓 โหมดเรียนรู้</button><button data-m="lv">🎮 โหมดด่าน</button><button data-m="ch">🧩 โหมดท้าทาย<br><small>ใช้บล็อกไม่เกินที่กำหนด</small></button><button data-m="ed">🛠 สร้างด่านเอง</button></div>
+<div class="card" id="lmc"><h3 id="lmt">🎮 เลือกด่าน</h3><div id="lm"></div></div>
+<div class="card" id="learn" hidden></div>
+<div class="card" style="margin-top:12px"><h3>🏆 ท้าทายเพื่อน — เล่นด่านจากลิงก์/รหัส</h3><div class="bar"><input id="cc" placeholder="วางลิงก์หรือรหัสด่านที่นี่" style="flex:1"><button id="cg">▶ เล่น</button></div></div>
+<div class="card" id="ds" style="margin-top:12px"></div></main>
+
+<main id="v-play" hidden><div id="say"><span id="sf">🤖</span><span id="sm"></span></div>
+<div class="pl"><div class="card" id="tbc"><h3>คำสั่ง</h3><div id="tb"></div></div>
+<div class="card" id="bc"><div id="bd"></div></div>
+<div class="card" id="pgc"><h3>ชุดคำสั่งของฉัน</h3><div id="pg"></div><div class="bar"><button id="clr">🔄 ล้างคำสั่ง</button><button id="hint">💡 คำใบ้</button><button id="go" class="big">▶ เริ่ม</button></div><div id="hx"></div></div></div></main>
+
+<main id="v-ed" hidden><div class="card"><h3>🛠 สร้างด่านของฉัน</h3>
+<div class="bar" id="et"></div><div class="ed" id="eg"></div>
+<div class="bar"><input id="en" placeholder="ชื่อด่าน" value="ด่านของฉัน"><input id="eb" placeholder="ผู้สร้าง"></div>
+<div class="bar"><select id="ed" class="f"><option value="1">⭐ ง่าย</option><option value="2">⭐⭐ กลาง</option><option value="3">⭐⭐⭐ ยาก</option></select><label>ใช้บล็อกไม่เกิน <input id="em" type="number" min="0" value="8" style="width:70px"></label></div>
+<div class="bar"><button id="et1">▶ ทดสอบด่าน</button><button id="es">🔗 แชร์ด่าน</button></div><input id="eo" readonly hidden style="width:100%;margin-top:8px"></div></main>
+
+<div id="res" hidden><div class="card" id="rc"></div></div>
+<script>
+const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const DX=[[0,-1],[1,0],[0,1],[-1,0]];
+let P={s:{},sc:0,h:0,cm:0,lp:0,cd:0,db:0,n:0,name:''},snd=1,ac;
+try{Object.assign(P,JSON.parse(localStorage.getItem('rsc1')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('rsc1',JSON.stringify(P))}catch(e){}};
+function beep(f,d=.1,t='sine'){if(!snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.stop(ac.currentTime+d)}catch(e){}}
+const LV=[["...../R..*./.....",4],["R..../...../..*..",5],["R..../...../....*",8],["R.*../...../..*..",6],["R.#../..#.*/.....",11],
+["R...../....../....../.....*",10],["R.*.../....../..*.../....*.",13],["R..#../...#../....../*...../.....*",15],["R.#.../..#.#./....#./.###../*...*.",15],["R...../.#.#../*.*..*",13],
+["....../R....*/......",3],[".....*/...../...../...../R....",6],["......./R.*.*.*",5],["R..*/..../..../*..*",7],["R.*.*/...../*.*.*",14],
+["....../R.o..*/......",6],["......../R.o..o.*",6],["R..o.*/....#./......",6],["R.o.*.o.*/.........",9],["R.o.*/...../*.o..",12]];
+const CN=[["ลำดับ (Sequence)","คอมพิวเตอร์จะทำตามคำสั่งจากบนลงล่าง ตามลำดับที่เราเขียน"],["วนซ้ำ (Loop)","เมื่อมีคำสั่งที่ต้องทำซ้ำหลายครั้ง เราสามารถใช้ Loop เพื่อลดจำนวนคำสั่งได้"],["เงื่อนไข (Condition)","หุ่นยนต์สามารถตรวจสอบสถานการณ์ก่อนตัดสินใจได้"]];
+const HT=[["ลองมองเส้นทางจากหุ่นยนต์ไปยังดาว","นับช่องที่ต้องเดิน แล้วดูว่าต้องเลี้ยวตรงไหน","ลองเขียนทีละช่วง: เดิน → เลี้ยว → เดินต่อ → เก็บดาว"],["มีคำสั่งไหนที่ซ้ำกันบ้าง?","ลองลากคำสั่งที่ซ้ำเข้าไปในกรอบ 🔁 แล้วเลือกจำนวนรอบ","นับดูว่ากรอบควรทำซ้ำกี่รอบ"],["มีหินอยู่ข้างหน้า ลองใช้คำสั่งเงื่อนไขดูไหม?","ใส่ [กระโดด] ไว้ในกรอบ 🧠 ถ้าเจอหิน แล้วตามด้วย [เดินหน้า]","ลองใส่ 🧠 กับ เดินหน้า ไว้ในกรอบ 🔁"]];
+const cOf=i=>i<10?0:i<15?1:2;
+const BD={f:['🟦 ⬆ เดินหน้า','b1'],l:['🟨 ↶ เลี้ยวซ้าย','b2'],r:['🟧 ↷ เลี้ยวขวา','b3'],c:['⭐ เก็บดาว','b4'],j:['🟩 🦘 กระโดด','b5'],rep:['🔁 ทำซ้ำ','b6'],ifr:['🧠 ถ้าเจอหิน','b7']};
+function mk(rows,o){const g=rows.split('/');const v={w:g[0].length,h:g.length,walls:new Set,rocks:new Set,stars:new Set,rows,...o};g.forEach((r,y)=>[...r].forEach((c,x)=>{const k=x+','+y;if(c=='#')v.walls.add(k);if(c=='o')v.rocks.add(k);if(c=='*')v.stars.add(k);if(c=='R')v.st=[x,y]}));return v}
+let lv,li,mode,prog,tid,nid,hints,tries,dbg,t0,busy,stop,pos,dir,ang,rem,loops,conds,steps;
+const show=v=>{['menu','play','ed'].forEach(k=>$('#v-'+k).hidden=k!=v);$('#res').hidden=true;if(v!='play')$('#lvl').textContent=''};
+function say(f,m){$('#sf').textContent=f;$('#sm').textContent=m}
+const face=f=>{const e=$('#fc');if(e)e.textContent=f};
+function fixed(t,n){}
+function menu(){show('menu');$('#pn').value=P.name||'';dash();lmap('lv')}
+function lmap(m){$('#learn').hidden=true;$('#lmc').hidden=false;$('#lmt').textContent=m=='ch'?'🧩 ท้าทาย: ผ่านโดยใช้บล็อกไม่เกินที่กำหนด':'🎮 เลือกด่าน';
+$('#lm').innerHTML=LV.map((l,i)=>{if(m=='ch'&&i<5)return'';const ok=m=='ch'?P.s[i]:(i==0||P.s[i-1]);const ic=cOf(i)==1?'🔁':cOf(i)==2?'🧠':'';return`<button data-l="${i}" data-md="${m}" ${ok?'':'disabled'}>${ok?ic+(i+1):'🔒'}<br><small>${'⭐'.repeat(P.s[i]||0)}</small></button>`}).join('')}
+function dash(){$('#ds').innerHTML=`<h3>📊 สรุปผลของ ${P.name||'ผู้เล่น'}</h3>⭐ คะแนนรวม ${P.sc} · 🏆 ด่านที่ผ่าน ${Object.keys(P.s).length}/20 · 🧩 คำสั่งที่ใช้ ${P.cm}<br>🔁 Loop ${P.lp} ครั้ง · 🧠 Condition ${P.cd} ครั้ง · 🐞 Debug ${P.db} ครั้ง · 💡 Hint ${P.h} ครั้ง<br><b>คุณกำลังพัฒนาทักษะการคิดอย่างเป็นระบบ!</b>`}
+document.addEventListener('click',e=>{const m=e.target.closest('[data-m]'),l=e.target.closest('[data-l]');
+if(m){const k=m.dataset.m;if(k=='learn'){$('#lmc').hidden=true;const s=$('#learn');s.hidden=false;s.innerHTML='<h3>🎓 สิ่งที่เราจะเรียน</h3>'+CN.map((c,i)=>`<p><b>${c[0]}</b><br>${c[1]}<br><button data-l="${[0,10,15][i]}" data-md="lv" class="big" style="margin-top:6px">ลองเลย</button></p>`).join('')+'<p><b>ดีบัก (Debug)</b><br>เมื่อหุ่นยนต์ไปต่อไม่ได้ ให้หาบล็อกที่กระพริบสีแดง แล้วแก้ไขและลองใหม่ — ลองใหม่ได้เสมอ!</p>'}else if(k=='ed')editor();else lmap(k)}
+if(l){startLv(mk(LV[+l.dataset.l][0],{par:LV[+l.dataset.l][1]}),+l.dataset.l,l.dataset.md)}});
+$('#home').onclick=()=>{stop=1;busy=0;menu()};
+$('#snd').onclick=()=>{snd=!snd;$('#snd').textContent=snd?'🔊 เสียงเปิด':'🔇 เสียงปิด'};
+$('#pn').oninput=e=>{P.name=e.target.value;save();dash()};
+function startLv(o,i,m){lv=o;li=i;mode=m;prog=[];tid=0;nid=0;hints=0;tries=0;dbg=0;t0=0;busy=0;stop=0;
+const all=i<0||i>=15,av=['f','l','r','c'];if(all||i>=10)av.push('rep');if(all)av.push('ifr','j');
+$('#tb').innerHTML=av.map(t=>`<button class="bk ${BD[t][1]}" draggable="true" data-t="${t}">${BD[t][0]}</button>`).join('');
+show('play');$('#lvl').textContent=i>=0?`ด่าน ${i+1} / 20`:lv.name;$('#hx').textContent=m=='ch'||lv.m?`🎯 ใช้บล็อกไม่เกิน ${m=='ch'?lv.par:lv.m} บล็อก`:'';
+reset();rendP();updG();if(i<0&&lv.by)say('🤖',`“${lv.name}” โดย ${lv.by} ${'⭐'.repeat(lv.d||1)}`)}
+function reset(){pos=[...lv.st];dir=1;ang=0;rem=new Set(lv.stars);loops=conds=steps=0;draw()}
+function draw(){const c=Math.min(56,Math.floor(Math.min(innerWidth-48,460)/lv.w));let h=`<div id="bo" style="--c:${c}px;grid-template-columns:repeat(${lv.w},var(--c))">`;
+for(let y=0;y<lv.h;y++)for(let x=0;x<lv.w;x++){const k=x+','+y;h+=`<div class="c ${lv.walls.has(k)?'w':''}" data-k="${k}">${lv.rocks.has(k)?'🪨':rem.has(k)?'⭐':''}</div>`}
+$('#bd').innerHTML=h+`<div id="rb"><span id="fc">😴</span><div id="dw"><i>➤</i></div></div></div>`;setR()}
+function setR(){$('#rb').style.transform=`translate(calc(var(--c)*${pos[0]}),calc(var(--c)*${pos[1]}))`;$('#dw').style.transform=`rotate(${ang}deg)`}
+const cont=id=>{if(!id)return prog;const f=a=>{for(const n of a){if(n.id==id)return n.kids;if(n.kids){const r=f(n.kids);if(r)return r}}};return f(prog)||prog};
+const rm=(id,a=prog)=>{const i=a.findIndex(n=>n.id==id);if(i>=0){a.splice(i,1);return 1}return a.some(n=>n.kids&&rm(id,n.kids))};
+const fn=(id,a=prog)=>{for(const n of a){if(n.id==id)return n;if(n.kids){const r=fn(id,n.kids);if(r)return r}}};
+const cnt=a=>a.reduce((s,n)=>s+1+(n.kids?cnt(n.kids):0),0);
+function add(t,into=tid){if(busy)return;const n={id:++nid,t};if(t=='rep'){n.n=3;n.kids=[]}if(t=='ifr')n.kids=[];cont(into).push(n);if(n.kids)tid=n.id;else tid=into;rendP();updG();beep(660,.08)}
+const rn=a=>a.map(n=>{const e=`data-id="${n.id}"`,x=`<button class="x" data-x="${n.id}" aria-label="ลบบล็อก">✕</button>`;
+if(!n.kids)return`<div class="bk ${BD[n.t][1]}" ${e}><div class="bh">${BD[n.t][0]}${x}</div></div>`;
+const hd=n.t=='rep'?`${BD.rep[0]} <select data-n="${n.id}" aria-label="จำนวนรอบ">${[2,3,4,5].map(v=>`<option ${v==n.n?'selected':''}>${v}</option>`).join('')}</select> ครั้ง`:BD.ifr[0];
+return`<div class="bk ${BD[n.t][1]}" ${e}><div class="bh">${hd}${x}</div><div class="kids ${n.id==tid?'tg':''}" data-k="${n.id}">${rn(n.kids)||'<em>ลากหรือแตะคำสั่งมาวางในกรอบนี้</em>'}</div></div>`}).join('');
+function rendP(){$('#pg').innerHTML=rn(prog)||'<em>ลากหรือแตะคำสั่งมาวางที่นี่</em>'}
+function updG(){if(li==0&&!busy){const t=prog.length==0?'ลากคำสั่ง “เดินหน้า” มาวางตรงนี้ (หรือแตะที่ปุ่ม)':prog.length<3?'ทำต่อไปได้เลย! ดาวอยู่ห่างไป 3 ช่อง แล้วลากคำสั่ง “เก็บดาว”':prog[prog.length-1].t!='c'?'ลาก “เก็บดาว” ต่อท้าย':'กด ▶ เริ่ม!';say('🤖',t)}}
+$('#pg').onclick=e=>{if(busy)return;const x=e.target.closest('[data-x]');if(x){rm(+x.dataset.x);tid=0;beep(300,.08)}else if(!e.target.closest('select')){const k=e.target.closest('[data-k]');tid=k?+k.dataset.k:0}rendP();updG()};
+$('#pg').onchange=e=>{const n=fn(+e.target.dataset.n);if(n)n.n=+e.target.value};
+$('#tb').onclick=e=>{const b=e.target.closest('[data-t]');if(b)add(b.dataset.t)};
+$('#tb').ondragstart=e=>{const b=e.target.closest('[data-t]');if(b){e.dataTransfer.setData('text',b.dataset.t);beep(500,.05)}};
+$('#pg').ondragover=e=>e.preventDefault();
+$('#pg').ondrop=e=>{e.preventDefault();const t=e.dataTransfer.getData('text');if(BD[t]){const k=e.target.closest('[data-k]');add(t,k?+k.dataset.k:0)}};
+$('#clr').onclick=()=>{if(busy)return;prog=[];tid=0;rendP();reset();updG()};
+$('#hint').onclick=()=>{hints++;P.h++;save();const c=lv.custom?2:cOf(Math.max(li,0));say('💡',HT[c][Math.min(hints-1,2)])};
+const hl=id=>{document.querySelectorAll('.run').forEach(e=>e.classList.remove('run'));const e=document.querySelector(`#pg [data-id="${id}"]`);if(e)e.classList.add('run')};
+const nxt=(s=1)=>[pos[0]+DX[dir][0]*s,pos[1]+DX[dir][1]*s];
+const okc=(x,y)=>x>=0&&y>=0&&x<lv.w&&y<lv.h&&!lv.walls.has(x+','+y);
+const bumpE=(n,m,h)=>({n,m,h:h||'ลองดูคำสั่งก่อนหน้านี้อีกครั้ง'});
+async function ex(a){for(const n of a){if(stop)throw{stop:1};if(++steps>400)throw bumpE(n,'โปรแกรมทำงานนานเกินไป','ลองตรวจดูจำนวนรอบ');hl(n.id);
+if(n.t=='rep'||n.t=='ifr'){if(!n.kids.length)throw bumpE(n,'กรอบนี้ยังว่างอยู่','ลากคำสั่งมาวางในกรอบก่อนนะ');
+if(n.t=='rep'){loops++;for(let i=0;i<n.n;i++)await ex(n.kids)}else{conds++;const[x,y]=nxt();await sleep(350);if(lv.rocks.has(x+','+y))await ex(n.kids)}continue}
+if(n.t=='l'||n.t=='r'){dir=(dir+(n.t=='r'?1:3))%4;ang+=n.t=='r'?90:-90;setR();beep(400,.1)}
+else if(n.t=='f'){const[x,y]=nxt();if(lv.rocks.has(x+','+y)){face('😵');beep(120,.3,'sawtooth');throw bumpE(n,'โอ๊ะ! มีหินขวางอยู่','มีหินอยู่ข้างหน้า ลองใช้คำสั่งเงื่อนไขดูไหม?')}
+if(!okc(x,y)){face('😵');$('#rb').classList.add('shake');beep(120,.3,'sawtooth');throw bumpE(n,'โอ๊ะ! ตรงนี้เดินต่อไม่ได้','หุ่นยนต์กำลังหันผิดทิศหรือเปล่านะ?')}pos=[x,y];setR();beep(330,.1)}
+else if(n.t=='j'){const[mx,my]=nxt(1),[x,y]=nxt(2);if(lv.walls.has(mx+','+my)||!okc(x,y)||lv.rocks.has(x+','+y)){face('😵');beep(120,.3,'sawtooth');throw bumpE(n,'โอ๊ะ! กระโดดลงตรงนี้ไม่ได้','กระโดดจะข้ามได้ 1 ช่อง แล้วลงช่องถัดไป')}face('😮');$('#fc').classList.add('jmp');pos=[x,y];setR();beep(700,.2)}
+else if(n.t=='c'){const k=pos.join(',');if(rem.has(k)){rem.delete(k);face('🤩');beep(880,.15);setTimeout(()=>beep(1175,.2),120);const c=document.querySelector(`#bo [data-k="${k}"]`);if(c)c.textContent=''}else throw bumpE(n,'ตรงนี้ยังไม่มีดาวให้เก็บ','หุ่นยนต์ยังไม่ถึงดาว ลองดูคำสั่งก่อนหน้านี้')}
+await sleep(550);face('🙂');$('#fc').classList.remove('jmp')}}
+$('#go').onclick=async()=>{if(busy)return;if(!prog.length){say('😕','ลากคำสั่งมาวางก่อนนะ');return}
+reset();busy=1;stop=0;tries++;if(!t0)t0=Date.now();face('🙂');say('🤖','กำลังทำงานทีละคำสั่ง...');$('#hx').textContent='';
+try{await ex(prog);document.querySelectorAll('.run').forEach(e=>e.classList.remove('run'));finish()}catch(e){if(e.stop)return;fail(e)}busy=0};
+function fail(e){dbg++;busy=0;document.querySelectorAll('.run').forEach(x=>x.classList.remove('run'));const el=document.querySelector(`#pg [data-id="${e.n.id}"]`);if(el)el.classList.add('err');
+say('😕',e.m+' — ลองตรวจสอบบล็อกสีแดงดูนะ');$('#hx').textContent='💡 '+e.h;beep(200,.3,'triangle');P.db++;save()}
+function finish(){busy=0;const c=cnt(prog),lim=mode=='ch'?lv.par:lv.m|0;
+if(rem.size){face('😕');dbg++;P.db++;save();say('😕','หุ่นยนต์ทำตามคำสั่งแล้ว แต่เส้นทางยังไม่ถึงดาวครบ (เหลือ '+rem.size+' ดวง) เกือบแล้ว!');return}
+if(lim&&c>lim){face('🙂');say('🤖',`เก็บดาวครบแล้ว! แต่ด่านนี้ท้าให้ใช้ไม่เกิน ${lim} บล็อก (ตอนนี้ ${c}) ลองใหม่ได้เลย`);return}
+const st=hints?1:c<=lv.par?3:2,pts=Math.max(20,100-hints*8-(tries-1)*3-Math.max(0,c-lv.par)*2),tm=Math.round((Date.now()-t0)/1000);
+face('🥳');beep(523,.15);setTimeout(()=>beep(659,.15),150);setTimeout(()=>beep(784,.3),300);
+if(li>=0)P.s[li]=Math.max(P.s[li]||0,st);P.sc+=pts;P.cm+=c;P.lp+=loops;P.cd+=conds;save();const cc=li>=0?cOf(li):2;
+$('#rc').innerHTML=`<h2>⭐ สำเร็จ!</h2><p>“เก็บดาวครบแล้ว!”</p><div style="font-size:2rem">${'⭐'.repeat(st)}${st==3?'<br>ยอดเยี่ยม!':''}</div><p>🏆 ${pts} คะแนน · ⏱ ${tm} วินาที<br>🧩 ${c} บล็อก · 💡 คำใบ้ ${hints} ครั้ง</p><p style="text-align:left"><b>🧠 สิ่งที่เราเรียนรู้</b><br>ด่านนี้เราใช้แนวคิด${CN[loops?1:conds?2:0][0]}<br>${CN[loops?1:conds?2:0][1]}</p><div class="bar">${li>=0&&li<19?'<button class="big" id="nx">ด่านต่อไป ▶</button>':''}<button id="rt">🔄 เล่นอีกครั้ง</button></div>`;
+$('#res').hidden=false;const nx=$('#nx');if(nx)nx.onclick=()=>startLv(mk(LV[li+1][0],{par:LV[li+1][1]}),li+1,mode=='ch'?'lv':mode);$('#rt').onclick=()=>{$('#res').hidden=true;startLv(lv,li,mode)};if(li>=0&&li<19&&li==4)beep(1000,.4)}
+/* editor */
+let et='*',eg;
+function editor(){eg=[...Array(30)].map((_,i)=>i==0?'R':'.');show('ed');$('#eo').hidden=true;
+$('#et').innerHTML=[['R','🤖 หุ่นยนต์'],['*','⭐ ดาว'],['o','🪨 หิน'],['#','⬛ กำแพง'],['.','⬜ ว่าง']].map(t=>`<button data-tt="${t[0]}">${t[1]}</button>`).join('');edr()}
+const EI={R:'🤖','*':'⭐',o:'🪨','#':'⬛','.':'⬜'};
+function edr(){$('#eg').style.gridTemplateColumns='repeat(6,1fr)';$('#eg').innerHTML=eg.map((c,i)=>`<button data-c="${i}" aria-label="ช่อง ${i+1}">${EI[c]}</button>`).join('')}
+$('#et').onclick=e=>{const b=e.target.closest('[data-tt]');if(b){et=b.dataset.tt;[...$('#et').children].forEach(x=>x.style.borderColor=x==b?'#4f7cff':'')}};
+$('#eg').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;const i=+b.dataset.c;if(et=='R')eg=eg.map(c=>c=='R'?'.':c);eg[i]=et;if(!eg.includes('R'))eg[0]=eg[0]=='.'?'R':eg[0];edr()};
+const eRows=()=>{const r=[];for(let y=0;y<5;y++)r.push(eg.slice(y*6,y*6+6).join(''));return r.join('/')};
+const eObj=()=>({n:$('#en').value||'ด่านของฉัน',by:$('#eb').value||P.name||'',d:+$('#ed').value,g:eRows(),m:+$('#em').value||0});
+const lvFrom=o=>mk(o.g,{name:o.n,by:o.by,d:o.d,m:o.m,par:o.m||8,custom:1});
+$('#et1').onclick=()=>{const g=eRows();if(!g.includes('R')||!g.includes('*')){alert('ต้องมีหุ่นยนต์ 🤖 และดาว ⭐ อย่างน้อย 1 อัน');return}startLv(lvFrom(eObj()),-1,'ed')};
+$('#es').onclick=()=>{const g=eRows();if(!g.includes('R')||!g.includes('*')){alert('ต้องมีหุ่นยนต์ 🤖 และดาว ⭐ อย่างน้อย 1 อัน');return}
+const code=btoa(unescape(encodeURIComponent(JSON.stringify(eObj())))),o=$('#eo'),u=location.href.split('#')[0]+'#'+code;o.hidden=false;o.value=u;o.select();try{navigator.clipboard.writeText(u)}catch(e){}};
+function loadCode(s){try{const c=s.includes('#')?s.split('#').pop():s;const o=JSON.parse(decodeURIComponent(escape(atob(c.trim()))));startLv(lvFrom(o),-1,'ed')}catch(e){alert('รหัสด่านไม่ถูกต้อง ลองคัดลอกใหม่อีกครั้ง')}}
+$('#cg').onclick=()=>loadCode($('#cc').value);
+menu();if(location.hash.length>10)loadCode(location.hash);
+</script></body></html>
